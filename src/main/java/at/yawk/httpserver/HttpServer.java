@@ -11,6 +11,7 @@ import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * @author yawkat
@@ -93,11 +94,15 @@ public final class HttpServer implements Closeable {
             } else { // OP_READ and/or OP_WRITE
 
                 Request request = (Request) key.attachment();
-                if ((ops & SelectionKey.OP_READ) != 0) {
-                    doRead(request);
-                }
-                if ((ops & SelectionKey.OP_WRITE) != 0) {
-                    doWrite(request);
+                try {
+                    if ((ops & SelectionKey.OP_READ) != 0) {
+                        doRead(request);
+                    }
+                    if ((ops & SelectionKey.OP_WRITE) != 0) {
+                        doWrite(request);
+                    }
+                } catch (Throwable t) {
+                    configuration.logger.log(Level.WARNING, "Exception in request handler", t);
                 }
                 iterator.remove();
             }

@@ -128,7 +128,7 @@ public final class Request {
     }
 
     void closeFromError(String msg) throws IOException {
-        // todo: log maybe
+        server.configuration.logger.fine("Disconnecting client due to malformed request: " + msg);
         forceDisconnect();
     }
 

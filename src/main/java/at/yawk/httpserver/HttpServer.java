@@ -21,29 +21,6 @@ public final class HttpServer implements Closeable {
     private final Selector selector;
     private final List<Interceptor> interceptors = new ArrayList<>(4);
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        try (HttpServer server = new HttpServer()) {
-            server.appendInterceptor(new Interceptor() {
-                @Override
-                public boolean read(Request request) throws IOException {
-                    System.out.println("Request: " + request.method + " " + request.path + " " + request.protocol);
-                    request.sendResponse();
-                    return false;
-                }
-
-                @Override
-                public boolean write(Request request) throws IOException {
-                    request.getWriteBuffer()
-                            .put("Hello World".getBytes());
-                    request.finish();
-                    return false;
-                }
-            });
-            server.bind(10000);
-            server.loop();
-        }
-    }
-
     public HttpServer() throws IOException {
         this(new Configuration());
     }

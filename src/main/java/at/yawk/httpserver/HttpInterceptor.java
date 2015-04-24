@@ -180,6 +180,7 @@ final class HttpInterceptor implements Interceptor {
                     // we're still writing one CrLf below
                 } else {
                     charBuffer.append(nextHeader.key);
+                    charBuffer.append(": ");
                     charBuffer.append(nextHeader.value);
                 }
             }

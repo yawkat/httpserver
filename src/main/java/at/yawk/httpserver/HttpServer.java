@@ -128,8 +128,11 @@ public final class HttpServer implements Closeable {
         }
     }
 
+    @Override
     public void close() throws IOException {
         selector.close();
+        for (SelectionKey key : selector.keys()) {
+            key.channel().close();
+        }
     }
-
 }
